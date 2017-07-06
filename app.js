@@ -39,7 +39,36 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     diceDOM.src = "dice-" + dice + ".png";
 
     // 3. Update round score IF the rolled number was NOT a 1
+    if (dice !== 1) {
+        //add score
+        roundScore += dice;
+        document.querySelector("#current-" + activePlayer).textContent = roundScore;
+    } else {
+        //next player
+        activePlayer === 0 ? actiePlayer = 1 : activePlayer = 0; //ternary operator
+        /* ^ is equivalent to
+        if(activePlayer === 0) {
+            activePlayer = 1;
+        } else {
+            activePlayer = 0
+        }*/
 
+        //set round score back to zero
+        roundScore = 0;
+
+        //set scores back to zero
+        document.getElementById("current-0").textContent = "0";
+        document.getElementById("current-0").textContent = "1";
+        
+        //add active class for current player
+        document.querySelector(".player-0-panel").classList.toggle("active");
+        document.querySelector(".player-1-panel").classList.toggle("active");
+
+        //document.querySelector(".player-0-panel").classList.remove("active");
+        //document.querySelector(".player-1-panel").classList.remove("active");
+
+        document.querySelector("dice").style.display = "none";
+    }
 });
 
 
