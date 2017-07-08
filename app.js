@@ -15,14 +15,14 @@ scores = [0,0];
 roundScore = 0;
 activePlayer = 0;
 
-//generate random number
+// Generate random number
 dice = Math.floor(Math.random() * 6) + 1;
 
 
-//change CSS property with querySelector
+// Change CSS property with querySelector
 document.querySelector(".dice").style.display = "none";
 
-//set scores to 0
+// Set scores to 0
 document.getElementById("score-0").textContent = "0";
 document.getElementById("score-1").textContent = "0";
 document.getElementById("current-0").textContent = "0";
@@ -40,12 +40,44 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
 
     // 3. Update round score IF the rolled number was NOT a 1
     if (dice !== 1) {
-        //add score
+        // Add score
         roundScore += dice;
         document.querySelector("#current-" + activePlayer).textContent = roundScore;
     } else {
-        //next player
-        activePlayer === 0 ? actiePlayer = 1 : activePlayer = 0; //ternary operator
+        // Next player
+        nextPlayer();
+    }
+});
+
+//HOLD function 
+document.querySelector(".btn-hold").addEventListener("click", function() {
+
+    // Add CURRENT score to global score
+    scores[activePlayer] += roundScore;
+    
+    // Update UI
+    document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer]
+
+    // Check IF player won the game
+    if (scores[activePlayer] >= 100) {
+        document.querySelector("#name-" + activePlayer).textContent = "Winner!";
+        document.querySelector(".dice").style.display = "none";
+
+        // Styles the panel of the winnng player with class from CSS
+        document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
+        document.querySelector(".player-" + activePlayer + "-panel").classList.remove("active");
+    } else {
+        // Next player
+        nextPlayer();
+    }
+});
+
+// FUNCTIONS
+
+// Creates nextPlayer function to maintain simplicity of code (DRY principle)
+function nextPlayer () {
+    //Next player
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0 //ternary operator
         /* ^ is equivalent to
         if(activePlayer === 0) {
             activePlayer = 1;
@@ -53,29 +85,16 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
             activePlayer = 0
         }*/
 
-        //set round score back to zero
+        // Set round score back to zero
         roundScore = 0;
 
-        //set scores back to zero
+        // Set scores back to zero
         document.getElementById("current-0").textContent = "0";
-        document.getElementById("current-0").textContent = "1";
+        document.getElementById("current-1").textContent = "0";
         
-        //add active class for current player
+        // Add active class for current player (shows current player in italics)
         document.querySelector(".player-0-panel").classList.toggle("active");
         document.querySelector(".player-1-panel").classList.toggle("active");
 
-        //document.querySelector(".player-0-panel").classList.remove("active");
-        //document.querySelector(".player-1-panel").classList.remove("active");
-
         document.querySelector("dice").style.display = "none";
-    }
-});
-
-
-
-
-//document.querySelector("#current-" + activePlayer).textContent = dice;
-//document.querySelector("#current-" + activePlayer).innerHTML = "<em>" + dice + "</em>";
-
-//read from document
-//var x = document.querySelector("#score-0").textContent;
+};
