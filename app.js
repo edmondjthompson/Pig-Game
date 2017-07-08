@@ -11,9 +11,7 @@ GAME RULES:
 
 var scores, roundScore, activePlayer;
 
-scores = [0,0];
-roundScore = 0;
-activePlayer = 0;
+newGame();
 
 // Generate random number
 dice = Math.floor(Math.random() * 6) + 1;
@@ -29,7 +27,7 @@ document.getElementById("current-0").textContent = "0";
 document.getElementById("current-1").textContent = "0";
 
 //event handlers
-document.querySelector(".btn-roll").addEventListener("click", function() {
+document.querySelector(".btn-roll").addEventListener("click", function () {
     // 1. Random number
     var dice = Math.floor(Math.random() * 6) + 1;
 
@@ -50,11 +48,11 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
 });
 
 //HOLD function 
-document.querySelector(".btn-hold").addEventListener("click", function() {
+document.querySelector(".btn-hold").addEventListener("click", function () {
 
     // Add CURRENT score to global score
     scores[activePlayer] += roundScore;
-    
+
     // Update UI
     document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer]
 
@@ -72,29 +70,57 @@ document.querySelector(".btn-hold").addEventListener("click", function() {
     }
 });
 
-// FUNCTIONS
-
 // Creates nextPlayer function to maintain simplicity of code (DRY principle)
-function nextPlayer () {
+function nextPlayer() {
     //Next player
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0 //ternary operator
-        /* ^ is equivalent to
-        if(activePlayer === 0) {
-            activePlayer = 1;
-        } else {
-            activePlayer = 0
-        }*/
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0 //ternary operator
+    /* ^ is equivalent to
+    if(activePlayer === 0) {
+        activePlayer = 1;
+    } else {
+        activePlayer = 0
+    }*/
 
-        // Set round score back to zero
-        roundScore = 0;
+    // Set round score back to zero
+    roundScore = 0;
 
-        // Set scores back to zero
-        document.getElementById("current-0").textContent = "0";
-        document.getElementById("current-1").textContent = "0";
-        
-        // Add active class for current player (shows current player in italics)
-        document.querySelector(".player-0-panel").classList.toggle("active");
-        document.querySelector(".player-1-panel").classList.toggle("active");
+    // Set scores back to zero
+    document.getElementById("current-0").textContent = "0";
+    document.getElementById("current-1").textContent = "0";
 
-        document.querySelector("dice").style.display = "none";
+    // Add active class for current player (shows current player in italics)
+    document.querySelector(".player-0-panel").classList.toggle("active");
+    document.querySelector(".player-1-panel").classList.toggle("active");
+
+    document.querySelector(".dice").style.display = "none";
 };
+
+// Initialize New game
+document.querySelector(".btn-new").addEventListener("click", newGame);
+
+
+//Creates a function that sets the rules when a new game is started that 1. Resets all scores to 0 and 2. Resets all on-screen
+function newGame() {
+    scores = [0, 0]; // Sets scores to 0
+    activePlayer = 0; // Set activePlayer score to 0
+    roundScore = 0; // Set roundScore back to 0
+
+    // Change CSS property with querySelector (hide dice)
+    document.querySelector(".dice").style.display = "none";
+
+    // Set scores on-screen to 0
+    document.getElementById("score-0").textContent = "0";
+    document.getElementById("score-1").textContent = "0";
+    document.getElementById("current-0").textContent = "0";
+    document.getElementById("current-1").textContent = "0";
+
+    //Reset text
+    document.getElementById("name-0").textContent = "Player 1!";
+    document.getElementById("name-1").textContent = "Player 2!";
+    document.querySelector(".player-0-panel").classList.remove("winner");
+    document.querySelector(".player-1-panel").classList.remove("winner");
+    document.querySelector(".player-0-panel").classList.remove("active");
+    document.querySelector(".player-1-panel").classList.remove("active");
+
+    document.querySelector(".player-0-panel").classList.add("active");
+}
